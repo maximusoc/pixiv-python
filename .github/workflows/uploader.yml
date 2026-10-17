@@ -17,7 +17,7 @@ permissions:
     contents: write # needed to commit posts.json back
 
 concurrency:
-    group: pixiv-uploader # never run two at once
+    group: r34-uploader # never run two at once
     cancel-in-progress: false
 
 jobs:
@@ -37,14 +37,14 @@ jobs:
             - name: Locate Chrome
               run: echo "CHROME_PATH=$(which google-chrome || which chromium-browser)" >> "$GITHUB_ENV"
 
-            - name: Random Delay (0 to 15 Minutes)
-              run: |
-                  # Generate random number between 0 and 900 seconds (15 minutes)
-                  DELAY=$((RANDOM % 901))
-                  MIN=$((DELAY / 60))
-                  SEC=$((DELAY % 60))
-                  echo "Waiting ${MIN}m ${SEC}s before starting main.py..."
-                  sleep $DELAY
+            # - name: Random Delay (0 to 15 Minutes)
+            #  run: |
+            #     # Generate random number between 0 and 900 seconds (15 minutes)
+            #      DELAY=$((RANDOM % 901))
+            #      MIN=$((DELAY / 60))
+            #      SEC=$((DELAY % 60))
+            #      echo "Waiting ${MIN}m ${SEC}s before starting main.py..."
+            #      sleep $DELAY
 
             # Cache entries are immutable, so each run saves under a fresh key
             # and restores the newest previous one via the prefix.
@@ -52,9 +52,17 @@ jobs:
               uses: actions/cache/restore@v4
               with:
                   path: storageState.json
-                  key: pixiv-session-${{ github.run_id }}
+                  key: r34-session-${{ github.run_id }}
                   restore-keys: |
-                      pixiv-session-
+                      r34-session-
+            - name: Seed session state
+              if: hashFiles('storageState.json') == ''
+              env:
+                  STATE_JSON: ${{ secrets.R34_STORAGE_STATE }}
+              run: |
+                  if [ -n "$STATE_JSON" ]; then
+                    echo "$STATE_JSON" > storageState.json
+                  fi
 
             - name: Run uploader
               env:

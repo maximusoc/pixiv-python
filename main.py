@@ -197,7 +197,7 @@ async def upload_post(tab, post: dict, image_path: Path):
     await tab.go_to(UPLOAD_URL)
     await human_pause(1.5, 3)
     
-    await snap(tab, f"upload form")
+    await snap(tab, "upload_form")
     
     file_input = await tab.query(SEL["file"], timeout=15)
     await file_input.set_input_files(str(image_path.resolve()))
@@ -222,6 +222,9 @@ async def upload_post(tab, post: dict, image_path: Path):
         await type_into(title, post["title"])
         await human_pause(0.4, 1.0)
         
+    
+    await snap(tab, "snap_1")
+    
     desc = await tab.query(SEL["description"], timeout=10)
     await desc.insert_text("")  # ensure focus path is valid
     await type_into(desc, DESCRIPTION, fast=True)
@@ -237,6 +240,9 @@ async def upload_post(tab, post: dict, image_path: Path):
     ai_generated = await tab.query(SEL["ai_generated"], timeout=10)
     await ai_generated.click()
     await human_pause(0.5, 1.0)
+    
+    
+    await snap(tab, "snap_2")
     
     checkbox = await tab.query(SEL["is_original"], timeout=10)
     await checkbox.click()

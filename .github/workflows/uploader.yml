@@ -72,7 +72,7 @@ jobs:
                   GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
                   GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
                   GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
-              run: python main.py
+              run: xvfb-run --auto-servernum --server-args="-screen 0 1366x843x24" python main.py
 
             - name: Save session state
               if: always() && hashFiles('storageState.json') != ''

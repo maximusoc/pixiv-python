@@ -172,6 +172,9 @@ async def login(tab):
     btn = await tab.query(SEL["login_submit"], timeout=10)
     await btn.click()
     await human_pause(2.5, 4.5)
+    
+    await snap(tab, "after login") 
+    
     if not await is_logged_in(tab):
         await snap(tab, "login_failed")
         raise RuntimeError("Login failed (bad credentials, captcha, or markup change)")
@@ -193,6 +196,8 @@ async def upload_post(tab, post: dict, image_path: Path):
     
     await tab.go_to(UPLOAD_URL)
     await human_pause(1.5, 3)
+    
+    await snap(tab, f"upload form")
     
     file_input = await tab.query(SEL["file"], timeout=15)
     await file_input.set_input_files(str(image_path.resolve()))

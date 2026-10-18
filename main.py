@@ -241,6 +241,10 @@ async def upload_post(tab, post: dict, image_path: Path):
     await ai_generated.click()
     await human_pause(0.5, 1.0)
     
+    ai_generated_re = await tab.query(SEL["ai_generated"], timeout=10)
+    await ai_generated_re.click()
+    await human_pause(0.5, 1.0)
+    
     
     await snap(tab, "snap_2")
     

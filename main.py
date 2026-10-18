@@ -166,6 +166,9 @@ async def login(tab):
     await human_pause()
     await type_into(pw, os.environ["PIXIV_PASSWORD"])
     await human_pause()
+    
+    await snap(tab, "upload_form")
+    
     btn = await tab.query(SEL["login_submit"], timeout=10)
     await btn.click()
     await human_pause(2.5, 4.5)

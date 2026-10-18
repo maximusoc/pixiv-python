@@ -17,7 +17,7 @@ permissions:
     contents: write # needed to commit posts.json back
 
 concurrency:
-    group: r34-uploader # never run two at once
+    group: pixiv-uploader # never run two at once
     cancel-in-progress: false
 
 jobs:
@@ -52,13 +52,13 @@ jobs:
               uses: actions/cache/restore@v4
               with:
                   path: storageState.json
-                  key: r34-session-${{ github.run_id }}
+                  key: pixiv-session-${{ github.run_id }}
                   restore-keys: |
-                      r34-session-
+                      pixiv-session-
             - name: Seed session state
               if: hashFiles('storageState.json') == ''
               env:
-                  STATE_JSON: ${{ secrets.R34_STORAGE_STATE }}
+                  STATE_JSON: ${{ secrets.PIXIV_STORAGE_STATE }}
               run: |
                   if [ -n "$STATE_JSON" ]; then
                     echo "$STATE_JSON" > storageState.json
